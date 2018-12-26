@@ -85,7 +85,7 @@ export class MatKeyboardComponent implements OnInit {
 
   // inject dependencies
   constructor(@Inject(LOCALE_ID) private _locale: string,
-              private _keyboardService: MatKeyboardService) {}
+    private _keyboardService: MatKeyboardService) { }
 
   setInputInstance(inputInstance: ElementRef) {
     this._inputInstance$.next(inputInstance);
@@ -221,6 +221,13 @@ export class MatKeyboardComponent implements OnInit {
 
     // notify subscribers
     this.shiftClick.next();
+  }
+
+  onKeyClick() {
+    if (this._modifier === 1) {
+      this._modifier = this._invertShiftModifier(this._modifier);
+      this.shiftClick.next();
+    }
   }
 
   private _invertAltModifier(modifier: KeyboardModifier): KeyboardModifier {
