@@ -34,6 +34,9 @@ export class MatKeyboardKeyComponent implements OnInit {
   key: string | KeyboardClassKey;
 
   @Input()
+  subkey: string;
+
+  @Input()
   set active(active: boolean) {
     this.active$.next(active);
   }
@@ -143,7 +146,7 @@ export class MatKeyboardKeyComponent implements OnInit {
 
   // Inject dependencies
   constructor(@Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
-              @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) {}
+    @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) { }
 
   ngOnInit() {
     // read the deadkeys
