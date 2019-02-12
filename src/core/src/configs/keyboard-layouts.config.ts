@@ -6026,6 +6026,7 @@ const keyboardLayouts: IKeyboardLayouts = {
         [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift]
       ],
       [
+        [KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide],
         [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
       ]
     ],
