@@ -6027,7 +6027,8 @@ const keyboardLayouts: IKeyboardLayouts = {
       ],
       [
         [KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide],
-        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
+        [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space],
+        [KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email]
       ]
     ],
     'lang': ['en-US']
