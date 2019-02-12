@@ -121,3 +121,11 @@ $mat-keyboard-capslock-shine: #adff2f !default;
     }
   }
 }
+
+.subkey {
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  font-size: 10px;
+  color:grey;
+}
