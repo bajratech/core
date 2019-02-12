@@ -8,4 +8,6 @@ export declare enum KeyboardClassKey {
     Shift = "Shift",
     Space = " ",
     Tab = "Tab",
+    Hide = "Hide",
+    Email = "@costco.com",
 }

@@ -47,6 +47,7 @@ export declare class MatKeyboardComponent implements OnInit {
      */
     isActive(key: (string | KeyboardClassKey)[]): boolean;
     getModifiedKey(key: (string | KeyboardClassKey)[]): string;
+    getSubKey(key: (string | KeyboardClassKey)[]): string;
     /**
      * listens to users keyboard inputs to simulate on virtual keyboard, too
      * @param event

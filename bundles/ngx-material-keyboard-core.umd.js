@@ -70,6 +70,8 @@ var KeyboardClassKey = {
     Shift: 'Shift',
     Space: ' ',
     Tab: 'Tab',
+    Hide: 'Hide',
+    Email: '@costco.com',
 };
 var KeyboardModifier = {
     None: 0,
@@ -6106,7 +6108,9 @@ var keyboardLayouts = {
                 [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift]
             ],
             [
-                [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
+                [KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide],
+                [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space],
+                [KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email]
             ]
         ],
         'lang': ['en-US']
@@ -6909,14 +6913,15 @@ keyboardDeadkeys['\u00b4'] = keyboardDeadkeys['\u0384'] = keyboardDeadkeys['\'']
 keyboardDeadkeys['\u00ba'] = keyboardDeadkeys['\u00b0'];
 keyboardDeadkeys['\u201a'] = keyboardDeadkeys['\u00B8'];
 var MAT_KEYBOARD_ICONS = new core.InjectionToken('keyboard-icons.config');
-var keyboardIcons = (_a = {}, _a[KeyboardClassKey.Bksp] = 'keyboard_backspace', _a[KeyboardClassKey.Caps] = 'keyboard_capslock', _a[KeyboardClassKey.Enter] = 'keyboard_return', _a[KeyboardClassKey.Shift] = 'keyboard_arrow_up', _a[KeyboardClassKey.Space] = ' ', _a[KeyboardClassKey.Tab] = 'keyboard_tab', _a);
+var keyboardIcons = (_a = {}, _a[KeyboardClassKey.Bksp] = 'keyboard_backspace', _a[KeyboardClassKey.Caps] = '', _a[KeyboardClassKey.Enter] = 'keyboard_return', _a[KeyboardClassKey.Shift] = 'keyboard_arrow_up', _a[KeyboardClassKey.Space] = ' ', _a[KeyboardClassKey.Tab] = '', _a[KeyboardClassKey.Hide] = 'keyboard_hide', _a);
 var VALUE_NEWLINE = '\n\r';
 var VALUE_SPACE = ' ';
 var VALUE_TAB = '\t';
 var MatKeyboardKeyComponent = /** @class */ (function () {
-    function MatKeyboardKeyComponent(_deadkeys, _icons) {
+    function MatKeyboardKeyComponent(_deadkeys, _icons, _keyboardService) {
         this._deadkeys = _deadkeys;
         this._icons = _icons;
+        this._keyboardService = _keyboardService;
         this._deadkeyKeys = [];
         this._iconKeys = [];
         this.active$ = new BehaviorSubject.BehaviorSubject(false);
@@ -7054,7 +7059,6 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
                 this.bkspClick.emit(event);
                 break;
             case KeyboardClassKey.Caps:
-                this.capsClick.emit(event);
                 break;
             case KeyboardClassKey.Enter:
                 if (this._isTextarea()) {
@@ -7072,8 +7076,9 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
                 this.spaceClick.emit(event);
                 break;
             case KeyboardClassKey.Tab:
-                char = VALUE_TAB;
-                this.tabClick.emit(event);
+                break;
+            case KeyboardClassKey.Hide:
+                this._keyboardService.dismiss();
                 break;
             default:
                 char = "" + this.key;
@@ -7082,7 +7087,12 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
         }
         if (char && this.input) {
             this.replaceSelectedText(char);
-            this._setCursorPosition(caret + 1);
+            if (char === '@costco.com') {
+                this._setCursorPosition(caret + 11);
+            }
+            else {
+                this._setCursorPosition(caret + 1);
+            }
         }
     };
     MatKeyboardKeyComponent.prototype.deleteSelectedText = function () {
@@ -7171,8 +7181,8 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
 MatKeyboardKeyComponent.decorators = [
     { type: core.Component, args: [{
                 selector: 'mat-keyboard-key',
-                template: "<button mat-raised-button\n        class=\"mat-keyboard-key\"\n        tabindex=\"-1\"\n        [class.mat-keyboard-key-active]=\"active$ | async\"\n        [class.mat-keyboard-key-pressed]=\"pressed$ | async\"\n        [ngClass]=\"cssClass\"\n        (click)=\"onClick($event)\"\n>\n  <mat-icon *ngIf=\"hasIcon\">{{ icon }}</mat-icon>\n  <ng-container *ngIf=\"!hasIcon\">{{ key }}</ng-container>\n</button>\n",
-                styles: ["@charset \"UTF-8\";\n:host{\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n  .mat-keyboard-key-active{\n    background-color:#e0e0e0; }\n  .mat-keyboard-key-pressed{\n    background-color:#bdbdbd; }\n  .mat-keyboard-key-capslock{\n    background-color:white; }\n    .mat-keyboard-key-capslock:before{\n      background-color:#bdbdbd;\n      border-radius:100%;\n      content:'';\n      display:inline-block;\n      height:3px;\n      left:5px;\n      position:absolute;\n      top:5px;\n      -webkit-transition:400ms cubic-bezier(0.25, 0.8, 0.25, 1);\n      transition:400ms cubic-bezier(0.25, 0.8, 0.25, 1);\n      -webkit-transition-property:background-color, -webkit-box-shadow;\n      transition-property:background-color, -webkit-box-shadow;\n      transition-property:background-color, box-shadow;\n      transition-property:background-color, box-shadow, -webkit-box-shadow;\n      width:3px; }\n    .mat-keyboard-key-capslock.mat-keyboard-key-active:before{\n      background-color:#0f0;\n      -webkit-box-shadow:0 0 \u00A7px #adff2f;\n              box-shadow:0 0 \u00A7px #adff2f; }\n:host-context(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n  :host-context(.dark-theme) .mat-keyboard-key-active{\n    background-color:#9e9e9e; }\n  :host-context(.dark-theme) .mat-keyboard-key-pressed{\n    background-color:#757575; }\n:host-context(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#6fa8aa; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#7fb1b3; }\n:host-context(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#99ffdd; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b2ffe5; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#7339ac; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#8040bf; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#a284e0; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b299e5; }\n"],
+                template: "<button mat-raised-button\n        class=\"mat-keyboard-key\"\n        tabindex=\"-1\"\n        [class.mat-keyboard-key-active]=\"active$ | async\"\n        [class.mat-keyboard-key-pressed]=\"pressed$ | async\"\n        [ngClass]=\"cssClass\"\n        (click)=\"onClick($event)\"\n>\n  <mat-icon *ngIf=\"hasIcon\">{{ icon }}</mat-icon>\n  <span class=\"subkey\">{{ subkey }}</span>\n  <ng-container *ngIf=\"!hasIcon\">\n    <span>{{ key }}</span>\n  </ng-container>\n</button>\n",
+                styles: [":host{\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n  .mat-keyboard-key-active{\n    background-color:#e0e0e0; }\n  .mat-keyboard-key-pressed{\n    background-color:#bdbdbd; }\n  .mat-keyboard-key-{\n    width:550px !important;\n    margin:0 auto; }\n  .mat-keyboard-key-hide{\n    color:darkgrey; }\n:host-context(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n  :host-context(.dark-theme) .mat-keyboard-key-active{\n    background-color:#9e9e9e; }\n  :host-context(.dark-theme) .mat-keyboard-key-pressed{\n    background-color:#757575; }\n:host-context(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#6fa8aa; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#7fb1b3; }\n:host-context(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#99ffdd; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b2ffe5; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#7339ac; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#8040bf; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#a284e0; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b299e5; }\n.subkey{\n  position:absolute;\n  top:-10px;\n  left:5px;\n  font-size:10px;\n  color:grey; }\n"],
                 changeDetection: core.ChangeDetectionStrategy.OnPush,
                 preserveWhitespaces: false
             },] },
@@ -7180,9 +7190,11 @@ MatKeyboardKeyComponent.decorators = [
 MatKeyboardKeyComponent.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: core.Inject, args: [MAT_KEYBOARD_DEADKEYS,] },] },
     { type: undefined, decorators: [{ type: core.Inject, args: [MAT_KEYBOARD_ICONS,] },] },
+    { type: MatKeyboardService, },
 ]; };
 MatKeyboardKeyComponent.propDecorators = {
     "key": [{ type: core.Input },],
+    "subkey": [{ type: core.Input },],
     "active": [{ type: core.Input },],
     "pressed": [{ type: core.Input },],
     "input": [{ type: core.Input },],
@@ -7279,6 +7291,37 @@ var MatKeyboardComponent = /** @class */ (function () {
         }
         return key[modifier];
     };
+    MatKeyboardComponent.prototype.getSubKey = function (key) {
+        if (!this._modifier) {
+            switch (key[0]) {
+                case '1':
+                    return '!';
+                case '2':
+                    return '@';
+                case '3':
+                    return '#';
+                case '4':
+                    return '$';
+                case '5':
+                    return '%';
+                case '6':
+                    return '^';
+                case '7':
+                    return '&';
+                case '8':
+                    return '*';
+                case '9':
+                    return '(';
+                case '0':
+                    return ')';
+                default:
+                    return '';
+            }
+        }
+        else {
+            return '';
+        }
+    };
     MatKeyboardComponent.prototype.onKeyDown = function (event) {
         this._keys
             .filter(function (key) { return key.key === event.key; })
@@ -7359,7 +7402,7 @@ var MatKeyboardComponent = /** @class */ (function () {
 MatKeyboardComponent.decorators = [
     { type: core.Component, args: [{
                 selector: 'mat-keyboard',
-                template: "<div class=\"mat-keyboard-wrapper\"\n     [class.dark-theme]=\"darkTheme$ | async\"\n     [class.debug]=\"isDebug$ | async\"\n>\n  <nav class=\"mat-keyboard-layout\">\n    <div class=\"mat-keyboard-row\"\n         *ngFor=\"let row of layout.keys\"\n    >\n      <ng-container *ngFor=\"let key of row\">\n        <mat-keyboard-key class=\"mat-keyboard-col\"\n                          *ngIf=\"getModifiedKey(key)\"\n                          [key]=\"getModifiedKey(key)\"\n                          [active]=\"isActive(key)\"\n                          [input]=\"inputInstance | async\"\n                          [control]=\"control\"\n                          (enterClick)=\"onEnterClick()\"\n                          (capsClick)=\"onCapsClick()\"\n                          (altClick)=\"onAltClick()\"\n                          (shiftClick)=\"onShiftClick()\"\n                          (keyClick)=\"onKeyClick()\"\n        ></mat-keyboard-key>\n      </ng-container>\n    </div>\n  </nav>\n</div>\n",
+                template: "<div class=\"mat-keyboard-wrapper\"\n     [class.dark-theme]=\"darkTheme$ | async\"\n     [class.debug]=\"isDebug$ | async\"\n>\n  <nav class=\"mat-keyboard-layout\">\n    <div class=\"mat-keyboard-row\"\n         *ngFor=\"let row of layout.keys\"\n    >\n      <ng-container *ngFor=\"let key of row\">\n        <mat-keyboard-key class=\"mat-keyboard-col\"\n                          *ngIf=\"getModifiedKey(key)\"\n                          [key]=\"getModifiedKey(key)\"\n                          [subkey]=\"getSubKey(key)\"\n                          [active]=\"isActive(key)\"\n                          [input]=\"inputInstance | async\"\n                          [control]=\"control\"\n                          (enterClick)=\"onEnterClick()\"\n                          (capsClick)=\"onCapsClick()\"\n                          (altClick)=\"onAltClick()\"\n                          (shiftClick)=\"onShiftClick()\"\n                          (keyClick)=\"onKeyClick()\"\n        ></mat-keyboard-key>\n      </ng-container>\n    </div>\n  </nav>\n</div>\n",
                 styles: [".mat-keyboard-wrapper{\n  background-color:whitesmoke;\n  border-radius:2px;\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px;\n  padding:14px 24px; }\n  .mat-keyboard-wrapper.dark-theme{\n    background-color:#424242; }\n.mat-keyboard-action{\n  background:none;\n  color:inherit;\n  -ms-flex-negative:0;\n      flex-shrink:0;\n  font-family:inherit;\n  font-size:inherit;\n  font-weight:600;\n  line-height:1;\n  margin-left:8px;\n  text-transform:uppercase; }\n:host(.dark-theme) .mat-keyboard-action{\n  color:whitesmoke; }\n.mat-keyboard-layout{\n  width:100%; }\n.mat-keyboard-row{\n  -webkit-box-align:stretch;\n      -ms-flex-align:stretch;\n          align-items:stretch;\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  -webkit-box-orient:horizontal;\n  -webkit-box-direction:normal;\n      -ms-flex-direction:row;\n          flex-direction:row;\n  -ms-flex-wrap:nowrap;\n      flex-wrap:nowrap; }\n.mat-keyboard-col{\n  -webkit-box-sizing:border-box;\n          box-sizing:border-box;\n  -webkit-box-flex:1;\n      -ms-flex:1 1 auto;\n          flex:1 1 auto;\n  padding:4px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n:host(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n:host(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host(.debug.dark-theme) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host(.debug.dark-theme) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n"],
                 changeDetection: core.ChangeDetectionStrategy.OnPush,
                 preserveWhitespaces: false

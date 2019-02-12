@@ -101,6 +101,8 @@ const KeyboardClassKey = {
     Shift: 'Shift',
     Space: ' ',
     Tab: 'Tab',
+    Hide: 'Hide',
+    Email: '@costco.com',
 };
 
 /**
@@ -6250,7 +6252,9 @@ const keyboardLayouts = {
                 [KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift, KeyboardClassKey.Shift]
             ],
             [
-                [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space]
+                [KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide, KeyboardClassKey.Hide],
+                [KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space, KeyboardClassKey.Space],
+                [KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email, KeyboardClassKey.Email]
             ]
         ],
         'lang': ['en-US']
@@ -7206,11 +7210,12 @@ keyboardDeadkeys['\u201a'] = keyboardDeadkeys['\u00B8'];
 const MAT_KEYBOARD_ICONS = new InjectionToken('keyboard-icons.config');
 const keyboardIcons = {
     [KeyboardClassKey.Bksp]: 'keyboard_backspace',
-    [KeyboardClassKey.Caps]: 'keyboard_capslock',
+    [KeyboardClassKey.Caps]: '',
     [KeyboardClassKey.Enter]: 'keyboard_return',
     [KeyboardClassKey.Shift]: 'keyboard_arrow_up',
     [KeyboardClassKey.Space]: ' ',
-    [KeyboardClassKey.Tab]: 'keyboard_tab'
+    [KeyboardClassKey.Tab]: '',
+    [KeyboardClassKey.Hide]: 'keyboard_hide'
 };
 
 /**
@@ -7224,10 +7229,12 @@ class MatKeyboardKeyComponent {
     /**
      * @param {?} _deadkeys
      * @param {?} _icons
+     * @param {?} _keyboardService
      */
-    constructor(_deadkeys, _icons) {
+    constructor(_deadkeys, _icons, _keyboardService) {
         this._deadkeys = _deadkeys;
         this._icons = _icons;
+        this._keyboardService = _keyboardService;
         this._deadkeyKeys = [];
         this._iconKeys = [];
         this.active$ = new BehaviorSubject(false);
@@ -7380,7 +7387,7 @@ class MatKeyboardKeyComponent {
                 this.bkspClick.emit(event);
                 break;
             case KeyboardClassKey.Caps:
-                this.capsClick.emit(event);
+                // this.capsClick.emit(event);
                 break;
             case KeyboardClassKey.Enter:
                 if (this._isTextarea()) {
@@ -7401,8 +7408,11 @@ class MatKeyboardKeyComponent {
                 this.spaceClick.emit(event);
                 break;
             case KeyboardClassKey.Tab:
-                char = VALUE_TAB;
-                this.tabClick.emit(event);
+                // char = VALUE_TAB;
+                // this.tabClick.emit(event);
+                break;
+            case KeyboardClassKey.Hide:
+                this._keyboardService.dismiss();
                 break;
             default:
                 // the key is not mapped or a string
@@ -7412,7 +7422,12 @@ class MatKeyboardKeyComponent {
         }
         if (char && this.input) {
             this.replaceSelectedText(char);
-            this._setCursorPosition(caret + 1);
+            if (char === '@costco.com') {
+                this._setCursorPosition(caret + 11);
+            }
+            else {
+                this._setCursorPosition(caret + 1);
+            }
         }
     }
     /**
@@ -7554,11 +7569,13 @@ MatKeyboardKeyComponent.decorators = [
         (click)="onClick($event)"
 >
   <mat-icon *ngIf="hasIcon">{{ icon }}</mat-icon>
-  <ng-container *ngIf="!hasIcon">{{ key }}</ng-container>
+  <span class="subkey">{{ subkey }}</span>
+  <ng-container *ngIf="!hasIcon">
+    <span>{{ key }}</span>
+  </ng-container>
 </button>
 `,
-                styles: [`@charset "UTF-8";
-:host{
+                styles: [`:host{
   display:-webkit-box;
   display:-ms-flexbox;
   display:flex;
@@ -7575,28 +7592,11 @@ MatKeyboardKeyComponent.decorators = [
     background-color:#e0e0e0; }
   .mat-keyboard-key-pressed{
     background-color:#bdbdbd; }
-  .mat-keyboard-key-capslock{
-    background-color:white; }
-    .mat-keyboard-key-capslock:before{
-      background-color:#bdbdbd;
-      border-radius:100%;
-      content:'';
-      display:inline-block;
-      height:3px;
-      left:5px;
-      position:absolute;
-      top:5px;
-      -webkit-transition:400ms cubic-bezier(0.25, 0.8, 0.25, 1);
-      transition:400ms cubic-bezier(0.25, 0.8, 0.25, 1);
-      -webkit-transition-property:background-color, -webkit-box-shadow;
-      transition-property:background-color, -webkit-box-shadow;
-      transition-property:background-color, box-shadow;
-      transition-property:background-color, box-shadow, -webkit-box-shadow;
-      width:3px; }
-    .mat-keyboard-key-capslock.mat-keyboard-key-active:before{
-      background-color:#0f0;
-      -webkit-box-shadow:0 0 §px #adff2f;
-              box-shadow:0 0 §px #adff2f; }
+  .mat-keyboard-key-{
+    width:550px !important;
+    margin:0 auto; }
+  .mat-keyboard-key-hide{
+    color:darkgrey; }
 :host-context(.dark-theme) .mat-keyboard-key{
   background-color:#616161;
   color:whitesmoke; }
@@ -7628,6 +7628,12 @@ MatKeyboardKeyComponent.decorators = [
   background-color:#a284e0; }
 :host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{
   background-color:#b299e5; }
+.subkey{
+  position:absolute;
+  top:-10px;
+  left:5px;
+  font-size:10px;
+  color:grey; }
 `],
                 changeDetection: ChangeDetectionStrategy.OnPush,
                 preserveWhitespaces: false
@@ -7637,9 +7643,11 @@ MatKeyboardKeyComponent.decorators = [
 MatKeyboardKeyComponent.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [MAT_KEYBOARD_DEADKEYS,] },] },
     { type: undefined, decorators: [{ type: Inject, args: [MAT_KEYBOARD_ICONS,] },] },
+    { type: MatKeyboardService, },
 ];
 MatKeyboardKeyComponent.propDecorators = {
     "key": [{ type: Input },],
+    "subkey": [{ type: Input },],
     "active": [{ type: Input },],
     "pressed": [{ type: Input },],
     "input": [{ type: Input },],
@@ -7771,6 +7779,41 @@ class MatKeyboardComponent {
             modifier = this._invertShiftModifier(this._modifier);
         }
         return key[modifier];
+    }
+    /**
+     * @param {?} key
+     * @return {?}
+     */
+    getSubKey(key) {
+        if (!this._modifier) {
+            switch (key[0]) {
+                case '1':
+                    return '!';
+                case '2':
+                    return '@';
+                case '3':
+                    return '#';
+                case '4':
+                    return '$';
+                case '5':
+                    return '%';
+                case '6':
+                    return '^';
+                case '7':
+                    return '&';
+                case '8':
+                    return '*';
+                case '9':
+                    return '(';
+                case '0':
+                    return ')';
+                default:
+                    return '';
+            }
+        }
+        else {
+            return '';
+        }
     }
     /**
      * listens to users keyboard inputs to simulate on virtual keyboard, too
@@ -7911,6 +7954,7 @@ MatKeyboardComponent.decorators = [
         <mat-keyboard-key class="mat-keyboard-col"
                           *ngIf="getModifiedKey(key)"
                           [key]="getModifiedKey(key)"
+                          [subkey]="getSubKey(key)"
                           [active]="isActive(key)"
                           [input]="inputInstance | async"
                           [control]="control"
