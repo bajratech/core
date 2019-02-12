@@ -10,6 +10,7 @@
         <mat-keyboard-key class="mat-keyboard-col"
                           *ngIf="getModifiedKey(key)"
                           [key]="getModifiedKey(key)"
+                          [subkey]="getSubKey(key)"
                           [active]="isActive(key)"
                           [input]="inputInstance | async"
                           [control]="control"

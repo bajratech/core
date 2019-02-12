@@ -8,6 +8,7 @@ import { MAT_KEYBOARD_ICONS } from '../../configs/keyboard-icons.config';
 import { KeyboardClassKey } from '../../enums/keyboard-class-key.enum';
 import { IKeyboardDeadkeys } from '../../interfaces/keyboard-deadkeys.interface';
 import { IKeyboardIcons } from '../../interfaces/keyboard-icons.interface';
+import { MatKeyboardService } from '../../services/keyboard.service';
 
 export const VALUE_NEWLINE = '\n\r';
 export const VALUE_SPACE = ' ';
@@ -32,6 +33,9 @@ export class MatKeyboardKeyComponent implements OnInit {
 
   @Input()
   key: string | KeyboardClassKey;
+
+  @Input()
+  subkey: string;
 
   @Input()
   set active(active: boolean) {
@@ -142,8 +146,10 @@ export class MatKeyboardKeyComponent implements OnInit {
   }
 
   // Inject dependencies
-  constructor(@Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
-              @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons) {}
+  constructor(
+    @Inject(MAT_KEYBOARD_DEADKEYS) private _deadkeys: IKeyboardDeadkeys,
+    @Inject(MAT_KEYBOARD_ICONS) private _icons: IKeyboardIcons,
+    private _keyboardService: MatKeyboardService) { }
 
   ngOnInit() {
     // read the deadkeys
@@ -181,7 +187,7 @@ export class MatKeyboardKeyComponent implements OnInit {
         break;
 
       case KeyboardClassKey.Caps:
-        this.capsClick.emit(event);
+        // this.capsClick.emit(event);
         break;
 
       case KeyboardClassKey.Enter:
@@ -205,8 +211,12 @@ export class MatKeyboardKeyComponent implements OnInit {
         break;
 
       case KeyboardClassKey.Tab:
-        char = VALUE_TAB;
-        this.tabClick.emit(event);
+        // char = VALUE_TAB;
+        // this.tabClick.emit(event);
+        break;
+
+      case KeyboardClassKey.Hide:
+        this._keyboardService.dismiss();
         break;
 
       default:
@@ -218,7 +228,12 @@ export class MatKeyboardKeyComponent implements OnInit {
 
     if (char && this.input) {
       this.replaceSelectedText(char);
-      this._setCursorPosition(caret + 1);
+      if (char === '@costco.com') {
+        this._setCursorPosition(caret + 11);
+      } else {
+        this._setCursorPosition(caret + 1);
+      }
+
     }
   }
 

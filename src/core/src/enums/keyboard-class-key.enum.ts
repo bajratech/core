@@ -10,5 +10,7 @@ export enum KeyboardClassKey {
   Enter = 'Enter',
   Shift = 'Shift',
   Space = ' ',
-  Tab = 'Tab'
+  Tab = 'Tab',
+  Hide = 'Hide',
+  Email = '@costco.com'
 }

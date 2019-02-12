@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
 $mat-typography-config: mat-typography-config();
 $mat-keyboard-button-distance: 8px !default;
@@ -12,7 +12,7 @@ $mat-keyboard-capslock-shine: #adff2f !default;
   font: {
     family: mat-font-family($mat-typography-config);
     size: mat-font-size($mat-typography-config, button);
-  }
+  };
   justify-content: space-between;
   line-height: 20px;
 }
@@ -31,27 +31,35 @@ $mat-keyboard-capslock-shine: #adff2f !default;
     }
 
     // special treatment for caps lock
-    &-capslock {
-      background-color: mat-color($mat-grey, 'A100');
+    // &-capslock {
+    //   background-color: mat-color($mat-grey, 'A100');
 
-      &:before {
-        background-color: mat-color($mat-grey, 400);
-        border-radius: 100%;
-        content: '';
-        display: inline-block;
-        height: 3px;
-        left: 5px;
-        position: absolute;
-        top: 5px;
-        transition: $mat-keyboard-capslock-animation-duration $mat-keyboard-capslock-animation-timing-function;
-        transition-property: background-color, box-shadow;
-        width: 3px;
-      }
+    //   &:before {
+    //     background-color: mat-color($mat-grey, 400);
+    //     border-radius: 100%;
+    //     content: '';
+    //     display: inline-block;
+    //     height: 3px;
+    //     left: 5px;
+    //     position: absolute;
+    //     top: 5px;
+    //     transition: $mat-keyboard-capslock-animation-duration $mat-keyboard-capslock-animation-timing-function;
+    //     transition-property: background-color, box-shadow;
+    //     width: 3px;
+    //   }
 
-      &.mat-keyboard-key-active:before {
-        background-color: $mat-keyboard-capslock-led;
-        box-shadow: 0 0 §px $mat-keyboard-capslock-shine;
-      }
+    //   &.mat-keyboard-key-active:before {
+    //     background-color: $mat-keyboard-capslock-led;
+    //     box-shadow: 0 0 §px $mat-keyboard-capslock-shine;
+    //   }
+    // }
+    &- {
+      width: 550px !important;
+      margin: 0 auto;
+    }
+
+    &-hide {
+      color: darkgrey;
     }
   }
 
@@ -120,4 +128,12 @@ $mat-keyboard-capslock-shine: #adff2f !default;
       background-color: lighten(mediumpurple, 10%);
     }
   }
+}
+
+.subkey {
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  font-size: 10px;
+  color: grey;
 }

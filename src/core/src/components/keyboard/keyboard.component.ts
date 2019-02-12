@@ -134,6 +134,38 @@ export class MatKeyboardComponent implements OnInit {
     return key[modifier];
   }
 
+  // retrieves superscipt keyset
+  getSubKey(key: (string | KeyboardClassKey)[]): string {
+    if (!this._modifier) {
+      switch (key[0]) {
+        case '1':
+          return '!';
+        case '2':
+          return '@';
+        case '3':
+          return '#';
+        case '4':
+          return '$';
+        case '5':
+          return '%';
+        case '6':
+          return '^';
+        case '7':
+          return '&';
+        case '8':
+          return '*';
+        case '9':
+          return '(';
+        case '0':
+          return ')';
+        default:
+          return ''
+      }
+    } else {
+      return '';
+    }
+  }
+
   /**
    * listens to users keyboard inputs to simulate on virtual keyboard, too
    * @param event
