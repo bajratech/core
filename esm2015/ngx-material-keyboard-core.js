@@ -7593,7 +7593,6 @@ MatKeyboardKeyComponent.decorators = [
   .mat-keyboard-key-pressed{
     background-color:#bdbdbd; }
   .mat-keyboard-key-{
-    width:550px !important;
     margin:0 auto; }
   .mat-keyboard-key-hide{
     color:darkgrey; }
