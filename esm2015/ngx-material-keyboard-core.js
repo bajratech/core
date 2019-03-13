@@ -7395,6 +7395,7 @@ class MatKeyboardKeyComponent {
                 }
                 else {
                     this.enterClick.emit(event);
+                    this._keyboardService.dismiss();
                     // TODO: trigger submit / onSubmit / ngSubmit properly (for the time being this has to be handled by the user himself)
                     // console.log(this.control.ngControl.control.root)
                     // this.input.nativeElement.form.submit();
@@ -7605,9 +7606,9 @@ MatKeyboardKeyComponent.decorators = [
       color:#74bb24;
       border-radius:50%;
       background:#e2f8c9;
-      height:16px;
-      width:16px;
-      font-size:15px; }
+      height:30px;
+      width:30px;
+      font-size:30px; }
 :host-context(.dark-theme) .mat-keyboard-key{
   background-color:#616161;
   color:whitesmoke; }
