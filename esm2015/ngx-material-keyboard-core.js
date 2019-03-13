@@ -7211,7 +7211,7 @@ const MAT_KEYBOARD_ICONS = new InjectionToken('keyboard-icons.config');
 const keyboardIcons = {
     [KeyboardClassKey.Bksp]: 'keyboard_backspace',
     [KeyboardClassKey.Caps]: '',
-    [KeyboardClassKey.Enter]: 'keyboard_return',
+    [KeyboardClassKey.Enter]: 'check',
     [KeyboardClassKey.Shift]: 'keyboard_arrow_up',
     [KeyboardClassKey.Space]: ' ',
     [KeyboardClassKey.Tab]: '',
@@ -7595,7 +7595,19 @@ MatKeyboardKeyComponent.decorators = [
   .mat-keyboard-key-{
     margin:0 auto; }
   .mat-keyboard-key-hide{
-    color:darkgrey; }
+    color:black; }
+    .mat-keyboard-key-hide .material-icons{
+      font-size:30px;
+      height:30px; }
+  .mat-keyboard-key-enter{
+    background-color:#74bb24; }
+    .mat-keyboard-key-enter .material-icons{
+      color:#74bb24;
+      border-radius:50%;
+      background:#e2f8c9;
+      height:16px;
+      width:16px;
+      font-size:15px; }
 :host-context(.dark-theme) .mat-keyboard-key{
   background-color:#616161;
   color:whitesmoke; }
