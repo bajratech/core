@@ -195,6 +195,7 @@ export class MatKeyboardKeyComponent implements OnInit {
           char = VALUE_NEWLINE;
         } else {
           this.enterClick.emit(event);
+          this._keyboardService.dismiss();
           // TODO: trigger submit / onSubmit / ngSubmit properly (for the time being this has to be handled by the user himself)
           // console.log(this.control.ngControl.control.root)
           // this.input.nativeElement.form.submit();
