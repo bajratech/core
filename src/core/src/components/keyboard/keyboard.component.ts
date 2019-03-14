@@ -58,6 +58,7 @@ export class MatKeyboardComponent implements OnInit {
 
   shiftClick: EventEmitter<void> = new EventEmitter<void>();
 
+  nextClick: EventEmitter<Event> = new EventEmitter<Event>();
   // returns an observable of the input instance
   get inputInstance(): Observable<ElementRef | null> {
     return this._inputInstance$.asObservable();
@@ -219,6 +220,11 @@ export class MatKeyboardComponent implements OnInit {
   onEnterClick() {
     // notify subscribers
     this.enterClick.next();
+  }
+
+  onNextClick(keyBoardInstance) {
+    // notify subscribers
+    this.nextClick.next(keyBoardInstance);
   }
 
   /**

@@ -88,6 +88,9 @@ export class MatKeyboardKeyComponent implements OnInit {
   @Output()
   keyClick = new EventEmitter<MouseEvent>();
 
+  @Output()
+  nextClick = new EventEmitter();
+
   get lowerKey(): string {
     return `${this.key}`.toLowerCase();
   }
@@ -195,7 +198,7 @@ export class MatKeyboardKeyComponent implements OnInit {
           char = VALUE_NEWLINE;
         } else {
           this.enterClick.emit(event);
-          this._keyboardService.dismiss();
+          this.nextClick.emit(this);
           // TODO: trigger submit / onSubmit / ngSubmit properly (for the time being this has to be handled by the user himself)
           // console.log(this.control.ngControl.control.root)
           // this.input.nativeElement.form.submit();
@@ -218,6 +221,7 @@ export class MatKeyboardKeyComponent implements OnInit {
 
       case KeyboardClassKey.Hide:
         this._keyboardService.dismiss();
+        this.input.nativeElement.blur();
         break;
 
       default:
