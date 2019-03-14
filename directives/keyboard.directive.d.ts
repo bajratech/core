@@ -14,6 +14,7 @@ export declare class MatKeyboardDirective implements OnDestroy {
     capsClick: EventEmitter<void>;
     altClick: EventEmitter<void>;
     shiftClick: EventEmitter<void>;
+    nextClick: EventEmitter<Event>;
     constructor(_elementRef: ElementRef, _keyboardService: MatKeyboardService, _control?: NgControl);
     ngOnDestroy(): void;
     private _showKeyboard();

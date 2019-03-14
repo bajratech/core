@@ -31,6 +31,7 @@ export declare class MatKeyboardKeyComponent implements OnInit {
     spaceClick: EventEmitter<MouseEvent>;
     tabClick: EventEmitter<MouseEvent>;
     keyClick: EventEmitter<MouseEvent>;
+    nextClick: EventEmitter<{}>;
     readonly lowerKey: string;
     readonly charCode: number;
     readonly isClassKey: boolean;

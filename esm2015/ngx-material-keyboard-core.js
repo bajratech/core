@@ -7248,6 +7248,7 @@ class MatKeyboardKeyComponent {
         this.spaceClick = new EventEmitter();
         this.tabClick = new EventEmitter();
         this.keyClick = new EventEmitter();
+        this.nextClick = new EventEmitter();
     }
     /**
      * @param {?} active
@@ -7395,7 +7396,7 @@ class MatKeyboardKeyComponent {
                 }
                 else {
                     this.enterClick.emit(event);
-                    this._keyboardService.dismiss();
+                    this.nextClick.emit(this);
                     // TODO: trigger submit / onSubmit / ngSubmit properly (for the time being this has to be handled by the user himself)
                     // console.log(this.control.ngControl.control.root)
                     // this.input.nativeElement.form.submit();
@@ -7414,6 +7415,7 @@ class MatKeyboardKeyComponent {
                 break;
             case KeyboardClassKey.Hide:
                 this._keyboardService.dismiss();
+                this.input.nativeElement.blur();
                 break;
             default:
                 // the key is not mapped or a string
@@ -7598,8 +7600,8 @@ MatKeyboardKeyComponent.decorators = [
   .mat-keyboard-key-hide{
     color:black; }
     .mat-keyboard-key-hide .material-icons{
-      font-size:30px;
-      height:30px; }
+      font-size:45px;
+      height:45px; }
   .mat-keyboard-key-enter{
     background-color:#74bb24; }
     .mat-keyboard-key-enter .material-icons{
@@ -7673,6 +7675,7 @@ MatKeyboardKeyComponent.propDecorators = {
     "spaceClick": [{ type: Output },],
     "tabClick": [{ type: Output },],
     "keyClick": [{ type: Output },],
+    "nextClick": [{ type: Output },],
 };
 
 /**
@@ -7701,6 +7704,7 @@ class MatKeyboardComponent {
         this.capsClick = new EventEmitter();
         this.altClick = new EventEmitter();
         this.shiftClick = new EventEmitter();
+        this.nextClick = new EventEmitter();
     }
     /**
      * @return {?}
@@ -7879,6 +7883,14 @@ class MatKeyboardComponent {
         this.enterClick.next();
     }
     /**
+     * @param {?} keyBoardInstance
+     * @return {?}
+     */
+    onNextClick(keyBoardInstance) {
+        // notify subscribers
+        this.nextClick.next(keyBoardInstance);
+    }
+    /**
      * simulates clicking `CapsLock` key
      * @param {?=} targetState
      * @return {?}
@@ -7975,6 +7987,7 @@ MatKeyboardComponent.decorators = [
                           (altClick)="onAltClick()"
                           (shiftClick)="onShiftClick()"
                           (keyClick)="onKeyClick()"
+                          (nextClick)="onNextClick($event)"
         ></mat-keyboard-key>
       </ng-container>
     </div>
@@ -8080,6 +8093,7 @@ class MatKeyboardDirective {
         this.capsClick = new EventEmitter();
         this.altClick = new EventEmitter();
         this.shiftClick = new EventEmitter();
+        this.nextClick = new EventEmitter();
     }
     /**
      * @return {?}
@@ -8107,6 +8121,7 @@ class MatKeyboardDirective {
         this._keyboardRef.instance.capsClick.subscribe(() => this.capsClick.next());
         this._keyboardRef.instance.altClick.subscribe(() => this.altClick.next());
         this._keyboardRef.instance.shiftClick.subscribe(() => this.shiftClick.next());
+        this._keyboardRef.instance.nextClick.subscribe((keyboardInstance) => this.nextClick.next(keyboardInstance));
     }
     /**
      * @return {?}
@@ -8137,6 +8152,7 @@ MatKeyboardDirective.propDecorators = {
     "capsClick": [{ type: Output },],
     "altClick": [{ type: Output },],
     "shiftClick": [{ type: Output },],
+    "nextClick": [{ type: Output },],
     "_showKeyboard": [{ type: HostListener, args: ['focus', ['$event'],] },],
     "_hideKeyboard": [{ type: HostListener, args: ['blur', ['$event'],] },],
 };

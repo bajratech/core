@@ -27,6 +27,7 @@ export declare class MatKeyboardComponent implements OnInit {
     capsClick: EventEmitter<void>;
     altClick: EventEmitter<void>;
     shiftClick: EventEmitter<void>;
+    nextClick: EventEmitter<Event>;
     readonly inputInstance: Observable<ElementRef | null>;
     darkTheme: boolean;
     isDebug: boolean;
@@ -62,6 +63,7 @@ export declare class MatKeyboardComponent implements OnInit {
      * bubbles event if submit is potentially triggered
      */
     onEnterClick(): void;
+    onNextClick(keyBoardInstance: any): void;
     /**
      * simulates clicking `CapsLock` key
      * @param targetState

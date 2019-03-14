@@ -6935,6 +6935,7 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
         this.spaceClick = new core.EventEmitter();
         this.tabClick = new core.EventEmitter();
         this.keyClick = new core.EventEmitter();
+        this.nextClick = new core.EventEmitter();
     }
     Object.defineProperty(MatKeyboardKeyComponent.prototype, "active", {
         get: function () {
@@ -7066,7 +7067,7 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
                 }
                 else {
                     this.enterClick.emit(event);
-                    this._keyboardService.dismiss();
+                    this.nextClick.emit(this);
                 }
                 break;
             case KeyboardClassKey.Shift:
@@ -7080,6 +7081,7 @@ var MatKeyboardKeyComponent = /** @class */ (function () {
                 break;
             case KeyboardClassKey.Hide:
                 this._keyboardService.dismiss();
+                this.input.nativeElement.blur();
                 break;
             default:
                 char = "" + this.key;
@@ -7183,7 +7185,7 @@ MatKeyboardKeyComponent.decorators = [
     { type: core.Component, args: [{
                 selector: 'mat-keyboard-key',
                 template: "<button mat-raised-button\n        class=\"mat-keyboard-key\"\n        tabindex=\"-1\"\n        [class.mat-keyboard-key-active]=\"active$ | async\"\n        [class.mat-keyboard-key-pressed]=\"pressed$ | async\"\n        [ngClass]=\"cssClass\"\n        (click)=\"onClick($event)\"\n>\n  <mat-icon *ngIf=\"hasIcon\">{{ icon }}</mat-icon>\n  <span class=\"subkey\">{{ subkey }}</span>\n  <ng-container *ngIf=\"!hasIcon\">\n    <span>{{ key }}</span>\n  </ng-container>\n</button>\n",
-                styles: [":host{\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n  .mat-keyboard-key-active{\n    background-color:#e0e0e0; }\n  .mat-keyboard-key-pressed{\n    background-color:#bdbdbd; }\n  .mat-keyboard-key-{\n    margin:0 auto; }\n  .mat-keyboard-key-hide{\n    color:black; }\n    .mat-keyboard-key-hide .material-icons{\n      font-size:30px;\n      height:30px; }\n  .mat-keyboard-key-enter{\n    background-color:#74bb24; }\n    .mat-keyboard-key-enter .material-icons{\n      color:#74bb24;\n      border-radius:50%;\n      background:#e2f8c9;\n      height:30px;\n      width:30px;\n      font-size:30px; }\n:host-context(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n  :host-context(.dark-theme) .mat-keyboard-key-active{\n    background-color:#9e9e9e; }\n  :host-context(.dark-theme) .mat-keyboard-key-pressed{\n    background-color:#757575; }\n:host-context(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#6fa8aa; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#7fb1b3; }\n:host-context(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#99ffdd; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b2ffe5; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#7339ac; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#8040bf; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#a284e0; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b299e5; }\n.subkey{\n  position:absolute;\n  top:-10px;\n  left:5px;\n  font-size:10px;\n  color:grey; }\n"],
+                styles: [":host{\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n  .mat-keyboard-key-active{\n    background-color:#e0e0e0; }\n  .mat-keyboard-key-pressed{\n    background-color:#bdbdbd; }\n  .mat-keyboard-key-{\n    margin:0 auto; }\n  .mat-keyboard-key-hide{\n    color:black; }\n    .mat-keyboard-key-hide .material-icons{\n      font-size:45px;\n      height:45px; }\n  .mat-keyboard-key-enter{\n    background-color:#74bb24; }\n    .mat-keyboard-key-enter .material-icons{\n      color:#74bb24;\n      border-radius:50%;\n      background:#e2f8c9;\n      height:30px;\n      width:30px;\n      font-size:30px; }\n:host-context(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n  :host-context(.dark-theme) .mat-keyboard-key-active{\n    background-color:#9e9e9e; }\n  :host-context(.dark-theme) .mat-keyboard-key-pressed{\n    background-color:#757575; }\n:host-context(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#6fa8aa; }\n:host-context(.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#7fb1b3; }\n:host-context(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#99ffdd; }\n:host-context(.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b2ffe5; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-active{\n  background-color:#7339ac; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-deadkey.mat-keyboard-key-pressed{\n  background-color:#8040bf; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-active{\n  background-color:#a284e0; }\n:host-context(.dark-theme.debug) .mat-keyboard-key-modifier.mat-keyboard-key-pressed{\n  background-color:#b299e5; }\n.subkey{\n  position:absolute;\n  top:-10px;\n  left:5px;\n  font-size:10px;\n  color:grey; }\n"],
                 changeDetection: core.ChangeDetectionStrategy.OnPush,
                 preserveWhitespaces: false
             },] },
@@ -7209,6 +7211,7 @@ MatKeyboardKeyComponent.propDecorators = {
     "spaceClick": [{ type: core.Output },],
     "tabClick": [{ type: core.Output },],
     "keyClick": [{ type: core.Output },],
+    "nextClick": [{ type: core.Output },],
 };
 var MatKeyboardComponent = /** @class */ (function () {
     function MatKeyboardComponent(_locale, _keyboardService) {
@@ -7224,6 +7227,7 @@ var MatKeyboardComponent = /** @class */ (function () {
         this.capsClick = new core.EventEmitter();
         this.altClick = new core.EventEmitter();
         this.shiftClick = new core.EventEmitter();
+        this.nextClick = new core.EventEmitter();
     }
     Object.defineProperty(MatKeyboardComponent.prototype, "inputInstance", {
         get: function () {
@@ -7355,6 +7359,9 @@ var MatKeyboardComponent = /** @class */ (function () {
     MatKeyboardComponent.prototype.onEnterClick = function () {
         this.enterClick.next();
     };
+    MatKeyboardComponent.prototype.onNextClick = function (keyBoardInstance) {
+        this.nextClick.next(keyBoardInstance);
+    };
     MatKeyboardComponent.prototype.onCapsClick = function (targetState) {
         if (targetState === void 0) { targetState = !this._capsLocked; }
         this._capsLocked = targetState;
@@ -7403,7 +7410,7 @@ var MatKeyboardComponent = /** @class */ (function () {
 MatKeyboardComponent.decorators = [
     { type: core.Component, args: [{
                 selector: 'mat-keyboard',
-                template: "<div class=\"mat-keyboard-wrapper\"\n     [class.dark-theme]=\"darkTheme$ | async\"\n     [class.debug]=\"isDebug$ | async\"\n>\n  <nav class=\"mat-keyboard-layout\">\n    <div class=\"mat-keyboard-row\"\n         *ngFor=\"let row of layout.keys\"\n    >\n      <ng-container *ngFor=\"let key of row\">\n        <mat-keyboard-key class=\"mat-keyboard-col\"\n                          *ngIf=\"getModifiedKey(key)\"\n                          [key]=\"getModifiedKey(key)\"\n                          [subkey]=\"getSubKey(key)\"\n                          [active]=\"isActive(key)\"\n                          [input]=\"inputInstance | async\"\n                          [control]=\"control\"\n                          (enterClick)=\"onEnterClick()\"\n                          (capsClick)=\"onCapsClick()\"\n                          (altClick)=\"onAltClick()\"\n                          (shiftClick)=\"onShiftClick()\"\n                          (keyClick)=\"onKeyClick()\"\n        ></mat-keyboard-key>\n      </ng-container>\n    </div>\n  </nav>\n</div>\n",
+                template: "<div class=\"mat-keyboard-wrapper\"\n     [class.dark-theme]=\"darkTheme$ | async\"\n     [class.debug]=\"isDebug$ | async\"\n>\n  <nav class=\"mat-keyboard-layout\">\n    <div class=\"mat-keyboard-row\"\n         *ngFor=\"let row of layout.keys\"\n    >\n      <ng-container *ngFor=\"let key of row\">\n        <mat-keyboard-key class=\"mat-keyboard-col\"\n                          *ngIf=\"getModifiedKey(key)\"\n                          [key]=\"getModifiedKey(key)\"\n                          [subkey]=\"getSubKey(key)\"\n                          [active]=\"isActive(key)\"\n                          [input]=\"inputInstance | async\"\n                          [control]=\"control\"\n                          (enterClick)=\"onEnterClick()\"\n                          (capsClick)=\"onCapsClick()\"\n                          (altClick)=\"onAltClick()\"\n                          (shiftClick)=\"onShiftClick()\"\n                          (keyClick)=\"onKeyClick()\"\n                          (nextClick)=\"onNextClick($event)\"\n        ></mat-keyboard-key>\n      </ng-container>\n    </div>\n  </nav>\n</div>\n",
                 styles: [".mat-keyboard-wrapper{\n  background-color:whitesmoke;\n  border-radius:2px;\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  font-family:Roboto, \"Helvetica Neue\", sans-serif;\n  font-size:14px;\n  -webkit-box-pack:justify;\n      -ms-flex-pack:justify;\n          justify-content:space-between;\n  line-height:20px;\n  padding:14px 24px; }\n  .mat-keyboard-wrapper.dark-theme{\n    background-color:#424242; }\n.mat-keyboard-action{\n  background:none;\n  color:inherit;\n  -ms-flex-negative:0;\n      flex-shrink:0;\n  font-family:inherit;\n  font-size:inherit;\n  font-weight:600;\n  line-height:1;\n  margin-left:8px;\n  text-transform:uppercase; }\n:host(.dark-theme) .mat-keyboard-action{\n  color:whitesmoke; }\n.mat-keyboard-layout{\n  width:100%; }\n.mat-keyboard-row{\n  -webkit-box-align:stretch;\n      -ms-flex-align:stretch;\n          align-items:stretch;\n  display:-webkit-box;\n  display:-ms-flexbox;\n  display:flex;\n  -webkit-box-orient:horizontal;\n  -webkit-box-direction:normal;\n      -ms-flex-direction:row;\n          flex-direction:row;\n  -ms-flex-wrap:nowrap;\n      flex-wrap:nowrap; }\n.mat-keyboard-col{\n  -webkit-box-sizing:border-box;\n          box-sizing:border-box;\n  -webkit-box-flex:1;\n      -ms-flex:1 1 auto;\n          flex:1 1 auto;\n  padding:4px; }\n.mat-keyboard-key{\n  min-width:0;\n  width:100%; }\n:host(.dark-theme) .mat-keyboard-key{\n  background-color:#616161;\n  color:whitesmoke; }\n:host(.debug) .mat-keyboard-key-deadkey{\n  background-color:cadetblue; }\n:host(.debug) .mat-keyboard-key-modifier{\n  background-color:aquamarine; }\n:host(.debug.dark-theme) .mat-keyboard-key-deadkey{\n  background-color:rebeccapurple; }\n:host(.debug.dark-theme) .mat-keyboard-key-modifier{\n  background-color:mediumpurple; }\n"],
                 changeDetection: core.ChangeDetectionStrategy.OnPush,
                 preserveWhitespaces: false
@@ -7428,6 +7435,7 @@ var MatKeyboardDirective = /** @class */ (function () {
         this.capsClick = new core.EventEmitter();
         this.altClick = new core.EventEmitter();
         this.shiftClick = new core.EventEmitter();
+        this.nextClick = new core.EventEmitter();
     }
     MatKeyboardDirective.prototype.ngOnDestroy = function () {
         this._hideKeyboard();
@@ -7447,6 +7455,7 @@ var MatKeyboardDirective = /** @class */ (function () {
         this._keyboardRef.instance.capsClick.subscribe(function () { return _this.capsClick.next(); });
         this._keyboardRef.instance.altClick.subscribe(function () { return _this.altClick.next(); });
         this._keyboardRef.instance.shiftClick.subscribe(function () { return _this.shiftClick.next(); });
+        this._keyboardRef.instance.nextClick.subscribe(function (keyboardInstance) { return _this.nextClick.next(keyboardInstance); });
     };
     MatKeyboardDirective.prototype._hideKeyboard = function () {
         if (this._keyboardRef) {
@@ -7474,6 +7483,7 @@ MatKeyboardDirective.propDecorators = {
     "capsClick": [{ type: core.Output },],
     "altClick": [{ type: core.Output },],
     "shiftClick": [{ type: core.Output },],
+    "nextClick": [{ type: core.Output },],
     "_showKeyboard": [{ type: core.HostListener, args: ['focus', ['$event'],] },],
     "_hideKeyboard": [{ type: core.HostListener, args: ['blur', ['$event'],] },],
 };
