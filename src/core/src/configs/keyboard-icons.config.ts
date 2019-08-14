@@ -6,7 +6,7 @@ const MAT_KEYBOARD_ICONS = new InjectionToken<IKeyboardIcons>('keyboard-icons.co
 const keyboardIcons: IKeyboardIcons = {
   [KeyboardClassKey.Bksp]: 'keyboard_backspace',
   [KeyboardClassKey.Caps]: '',
-  [KeyboardClassKey.Enter]: 'keyboard_return',
+  [KeyboardClassKey.Enter]: 'check',
   [KeyboardClassKey.Shift]: 'keyboard_arrow_up',
   [KeyboardClassKey.Space]: ' ',
   [KeyboardClassKey.Tab]: '',
